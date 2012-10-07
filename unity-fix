@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Remove and fix crazy stuff from unity
+
+case $(lsb_release -cs) in
+	precise)
+
+		# Remove global menu
+		sudo apt-get remove -y appmenu-gtk appmenu-gtk3 appmenu-qt
+
+		# Remove overlay scrollbars
+		sudo apt-get remove liboverlay-scrollbar3-0.2-0
+
+		# 3x3 desktop
+		gconftool --set /apps/compiz-1/general/screen0/options/hsize 3 --type int
+		gconftool --set /apps/compiz-1/general/screen0/options/vsize 3 --type int
+
+		# Only show launcher on primary monitor
+		gconftool --set /apps/compiz-1/plugins/unityshell/screen0/options/num_launchers 1 --type int
+
+		# Set "sticky edges" to 1
+		gconftool --set /apps/compiz-1/plugins/unityshell/screen0/options/overcome_pressure 1 --type int
+
+		# Change default terminal
+		sudo apt-get install -y terminator
+		gconftool --type string --set /desktop/gnome/applications/terminal/exec terminator
+
+		;;
+	*)
+		echo "No configuration for your version"
+		exit 1
+		;;
+esac
