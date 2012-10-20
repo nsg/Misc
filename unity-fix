@@ -26,6 +26,23 @@ case $(lsb_release -cs) in
 		gconftool --type string --set /desktop/gnome/applications/terminal/exec terminator
 
 		;;
+	quantal)
+
+		# Remove global menu
+		sudo apt-get remove -y appmenu-gtk appmenu-gtk3 appmenu-qt
+
+		# Remove overlay scrollbars
+		sudo apt-get remove liboverlay-scrollbar3-0.2-0
+
+		# 3x3 desktop
+		gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 3
+		gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 3
+
+		# Change default terminal
+		sudo apt-get install -y terminator
+		gsettings set org.gnome.desktop.default-applications.terminal exec /usr/bin/terminator
+
+		;;
 	*)
 		echo "No configuration for your version"
 		exit 1
