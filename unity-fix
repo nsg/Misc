@@ -29,7 +29,7 @@ case $(lsb_release -cs) in
 	quantal)
 
 		# Remove global menu
-		sudo apt-get remove -y appmenu-gtk appmenu-gtk3 appmenu-qt
+		sudo apt-get remove -y appmenu-gtk appmenu-gtk3 appmenu-qt indicator-appmenu
 
 		# Remove overlay scrollbars
 		sudo apt-get remove liboverlay-scrollbar3-0.2-0
