@@ -1,0 +1,61 @@
+local x = 0
+local y = 0
+local z = 0
+
+-- Calc height
+while turtle.up() do end -- find wall
+while turtle.down() do
+    turtle.down()
+    y = y + 1
+end
+
+-- Calc width
+turtle.turnLeft()
+while turtle.forward() do end -- find wall
+while turtle.back() do
+    x = x + 1
+end
+
+-- Calc length
+turtle.turnLeft()
+while turtle.forward() do end -- find wall
+while turtle.back() do
+    z = z + 1
+end
+
+turtle.digDown()
+turtle.down() -- In floor
+turtle.digDown()
+turtle.down() -- Under floor
+turtle.turnRight()
+turtle.turnRight()
+turtle.dig()
+turtle.forward()
+turtle.turnRight()
+turtle.dig()
+turtle.forward()
+turtle.turnRight() -- In wall, start program
+
+for i = -2, y, 1 do
+    for k = -2, x, 1 do
+        for j = -1, z, 1 do
+            turtle.dig()
+            turtle.forward()
+        end
+        for j = -1, z, 1 do
+            turtle.back()
+        end
+        turtle.turnRight()
+        turtle.dig()
+        turtle.forward()
+        turtle.turnLeft()
+    end
+    turtle.turnLeft()
+    for k = -2, x, 1 do
+        turtle.dig()
+        turtle.forward()
+    end
+    turtle.turnRight()
+    turtle.digDown()
+    turtle.down()
+end
