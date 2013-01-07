@@ -1,0 +1,76 @@
+print("Miner started")
+
+-- load api
+shell.run('/disk/diggerAPI')
+
+local mine_size = {4, 4}
+local start_height = 53
+
+-- logic
+digger.up()
+digger.up()
+digger.up()
+digger.up()
+turtle.turnRight()
+digger.forward()
+turtle.turnLeft()
+
+while(digger.down()) do
+    digger.down()
+    digger.down()
+    
+    -- checks
+    while digger.check_slots(4) do sleep(1) end
+    
+    -- dig layer
+    for lx = 0, math.floor(mine_size[1]/2), 1 do
+        for lz = 0, mine_size[2], 1 do
+            digger.mine()
+            digger.forward()
+        end
+        turtle.turnRight()
+        digger.forward()
+        turtle.turnRight()
+        for lz = 0, mine_size[2], 1 do
+            digger.mine()
+            digger.forward()
+        end
+        -- prevent last turn
+        if math.floor(mine_size[1]/2) > lx then
+            turtle.turnLeft()
+            digger.forward()
+            digger.mine()
+            turtle.turnLeft()
+        end
+    end
+
+    -- return to start
+    turtle.turnRight()
+    for lx = 0, mine_size[1], 1 do
+       digger.forward() 
+    end
+    print("Layer done, at depth " .. digger.cords[2])
+    for ly = digger.cords[2], 0, 1 do
+        digger.up(false)
+    end
+    
+    -- Go forward, drop items, call home, return to 0,0,0 or stop
+    turtle.forward()
+    turtle.forward()
+    digger.dropAll(5)
+    digger.call_home(digger.cords[2])
+    if digger.command == "stop" then
+        print("command: stop")
+        break 
+    end
+    turtle.back()
+    turtle.back()
+    turtle.turnRight()
+
+    -- Go down to the mine
+    print("Return to layer " .. digger.cords[2])
+    for ly = digger.cords[2], 0, 1 do
+        digger.down(false)
+    end
+    
+end
