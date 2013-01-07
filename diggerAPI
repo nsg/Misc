@@ -1,0 +1,136 @@
+digger = {}
+digger.__index = digger
+
+digger.cords = {0, 0, 0}
+digger.id = os.getComputerID()
+digger.command = nil
+
+function digger.up(update_cords)
+    local c = 1
+    local walk = false
+    while not walk do
+        if turtle.detectUp() then
+            turtle.digUp()
+        end
+        walk = turtle.up()
+        if c > 10 then
+            print("up() timeout, tried 10 times")
+            return false
+        end
+        c = c + 1
+    end
+    
+    if update_cords == nil then
+        digger.cords = { 
+            digger.cords[1], 
+            digger.cords[2] + 1, 
+            digger.cords[3] 
+        }
+    end
+
+    return true
+end
+
+function digger.down(update_cords)
+    local c = 1
+    local walk = false
+    while not walk do
+        if turtle.detectDown() then
+            turtle.digDown()
+        end
+        walk = turtle.down()
+        if c > 10 then
+            print("down() timeout, tried 10 times")
+            return false
+        end
+        c = c + 1
+    end
+
+    if update_cords == nil then
+        digger.cords = { 
+            digger.cords[1], 
+            digger.cords[2] - 1, 
+            digger.cords[3] 
+        }
+    end
+
+    return true
+end
+
+function digger.forward()
+    local c = 1
+    local walk = false
+    while not walk do
+        if turtle.detect() then
+            turtle.dig()
+        end
+        walk = turtle.forward()
+        if c > 10 then
+            print("forward() timeout, tried 10 times")
+            return false
+        end
+        c = c + 1
+    end
+    return true
+end
+
+function digger.mine()
+
+    local scrap = {false, false}
+
+    -- check up
+    for f = 6, 9, 1 do
+        turtle.select(f)
+        if turtle.compareUp() then
+            scrap[1] = true
+            break;
+        end
+    end
+
+    -- check down
+    for f = 6, 9, 1 do
+        if turtle.compareDown() then
+            scrap[2] = true
+            break
+        end
+end
+
+    print(scrap[1])
+    print(scrap[2])
+    print("---")
+
+    -- dig if we found some ores
+    if not scrap[1] then turtle.digUp() end
+    if not scrap[2] then turtle.digDown() end
+
+end
+
+function digger.check_slots(n)
+    for f = 10 - n, 9, 1 do
+        turtle.select(f)
+        if turtle.getItemCount(f) == 0 then
+            print("Slot " .. f .. " is empty, waiting...")
+            return true
+        end
+    end
+    return false
+end
+
+function digger.dropAll(n)
+    turtle.select(1)
+    for f = 1, n, 1 do
+        if turtle.getItemCount(f) > 0 then
+            turtle.drop()
+        end
+    end
+end
+
+function digger.call_home(data)
+    data = "id=" .. digger.id .. "&data=" .. data
+    local res = http.post("http://langwell.nsg.cc/digger/",data);
+  if(not res) then
+		print("http error")
+	else
+		digger.command = res.readLine();
+	end
+end
