@@ -1,0 +1,27 @@
+#!/bin/bash
+
+clean() {
+	[ -f $TMP ] && rm $TMP
+}
+
+PASS=$1
+TMP=$(mktemp /tmp/$USER$HOST.XXXXX)
+
+if [ -z $TMP ]; then
+	echo "TMP is empty, abort"
+	exit 1
+fi
+
+if [ -z $DISPLAY ]; then
+	DISPLAY=":0.0"
+fi
+
+trap clean HUP INT QUIT ABRT TERM EXIT
+
+echo -e "#!/bin/sh\necho $1\n" > $TMP
+chmod +x $TMP
+export SSH_ASKPASS=$TMP
+
+shift
+
+setsid ssh $@
