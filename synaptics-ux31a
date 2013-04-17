@@ -10,6 +10,9 @@
 # press.
 xinput set-prop "ETPS/2 Elantech Touchpad" "Synaptics ClickPad" 1
 
+# Enable 2 finger scrolling (vertical and horizontal)
+xinput set-prop "ETPS/2 Elantech Touchpad" "Synaptics Two-Finger Scrolling" 1 1
+
 # Coordinates of right and middle soft buttons
 # Soft buttons disabled
 xinput set-prop "ETPS/2 Elantech Touchpad" "Synaptics Soft Button Areas" \
