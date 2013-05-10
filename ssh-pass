@@ -18,7 +18,7 @@ fi
 
 trap clean HUP INT QUIT ABRT TERM EXIT
 
-echo -e "#!/bin/sh\necho $1\n" > $TMP
+echo -e "#!/bin/sh\necho $PASS\n" > $TMP
 chmod +x $TMP
 export SSH_ASKPASS=$TMP
 
