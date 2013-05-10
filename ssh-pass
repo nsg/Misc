@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Note: This script is using the setsid binary
+# found on Linux systems. If someone knows a
+# better alternative who is more cross platform,
+# please contact me (or submit a patch).
+
 clean() {
 	[ -f $TMP ] && rm $TMP
 }
